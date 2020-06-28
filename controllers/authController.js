@@ -4,27 +4,25 @@ const jwt = require("jsonwebtoken");
 
 const User = require("../models/User");
 
-exports.createUser = async (req, res) => {
+exports.authenticateUser = async (req, res) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty())
     return res.status(400).json({ errors: errors.array() });
 
   const { email, password } = req.body;
+
   try {
+    // Verify user exists
     let user = await User.findOne({ email });
 
-    if (user) return res.status(400).json({ msg: "The user already exists" });
+    if (!user) return res.status(400).json({ msg: "The user does not exists" });
 
-    // Create new user
-    user = new User(req.body);
+    // Verify password
+    const validPassword = await bcryptjs.compare(password, user.password);
 
-    // Hash password
-    const salt = await bcryptjs.genSalt(10);
-    user.password = await bcryptjs.hash(password, salt);
-
-    // Saves new user
-    await user.save();
+    if (!validPassword)
+      return res.status(400).json({ msg: "Incorrect password" });
 
     // Create JWT
     const payload = {
@@ -49,6 +47,5 @@ exports.createUser = async (req, res) => {
     );
   } catch (error) {
     console.log(error);
-    res.status(400).send("There has been an error");
   }
 };
