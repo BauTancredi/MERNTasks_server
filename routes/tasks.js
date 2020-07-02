@@ -12,7 +12,10 @@ const router = express.Router();
 router.post(
   "/",
   auth,
-  [check("Name", "The name is mandatory.").not().isEmpty()],
+  [
+    check("Name", "The name is mandatory.").not().isEmpty(),
+    check("Project", "The Project is mandatory.").not().isEmpty(),
+  ],
   taskController.createTask
 );
 
