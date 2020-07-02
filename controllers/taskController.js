@@ -89,3 +89,28 @@ exports.updateTask = async (req, res) => {
     res.status(500).send("There has been an error");
   }
 };
+
+// Delete task
+exports.deleteTask = async (req, res) => {
+  try {
+    // Extract the project and check if exists
+    const { project } = req.body;
+
+    const projectExists = await Project.findById(project);
+    let task = await Task.findById(req.params.id);
+
+    //Tasks exists or not
+    if (!task) return res.status(404).json({ msg: "Task dont exists" });
+
+    // Check if project belongs to user authenticated
+    if (projectExists.creator.toString() !== req.user.id)
+      return res.status(401).json({ msg: "Not authorizated" });
+
+    // Delete task
+    await Task.findOneAndRemove({ _id: req.params.id });
+    res.json({ msg: "Task deleted" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("There has been an error");
+  }
+};
