@@ -19,6 +19,9 @@ router.post(
   taskController.createTask
 );
 
+// Get tasks
 router.get("/", auth, taskController.obtainTasks);
 
+// Update task
+router.put("/:id", auth, taskController.updateTask);
 module.exports = router;
