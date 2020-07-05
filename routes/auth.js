@@ -9,16 +9,7 @@ const router = express.Router();
 
 // Authenticate user
 // api/auth
-router.post(
-  "/",
-  [
-    check("email", "Add a valid email").isEmail(),
-    check("password", "Password must be at least 6 characters long").isLength({
-      min: 6,
-    }),
-  ],
-  authController.authenticateUser
-);
+router.post("/", authController.authenticateUser);
 
 // Obtains authenticated user
 router.get("/", auth, authController.authenticatedUser);
