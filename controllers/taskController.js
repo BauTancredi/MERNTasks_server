@@ -10,10 +10,10 @@ exports.createTask = async (req, res) => {
   if (!errors.isEmpty())
     return res.status(400).json({ errors: errors.array() });
 
-  // Extract the project and check if exists
-  const { project } = req.body;
-
   try {
+    // Extract the project and check if exists
+    const { project } = req.body;
+
     const projectExists = await Project.findById(project);
 
     if (!projectExists)

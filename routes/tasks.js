@@ -13,8 +13,8 @@ router.post(
   "/",
   auth,
   [
-    check("Name", "The name is mandatory.").not().isEmpty(),
-    check("Project", "The Project is mandatory.").not().isEmpty(),
+    check("name", "The name is mandatory.").not().isEmpty(),
+    check("project", "The Project is mandatory.").not().isEmpty(),
   ],
   taskController.createTask
 );
