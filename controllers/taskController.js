@@ -37,8 +37,9 @@ exports.createTask = async (req, res) => {
 exports.obtainTasks = async (req, res) => {
   try {
     // Extract the project and check if exists
-    const { project } = req.body;
+    const { project } = req.query;
 
+    console.log(req.query);
     const projectExists = await Project.findById(project);
 
     if (!projectExists)
